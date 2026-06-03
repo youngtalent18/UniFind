@@ -355,16 +355,11 @@ export const getUserProfile = async (
 // FORGOT PASSWORD
 // ======================================================
 
-export const forgotPassword = async (
-  req,
-  res
-) => {
+export const forgotPassword = async ( req, res ) => {
   try {
     const { email } = req.body;
 
-    const normalizedEmail = email
-      ?.toLowerCase()
-      .trim();
+    const normalizedEmail = email?.toLowerCase().trim();
 
     const user = await User.findOne({
       email: normalizedEmail,
@@ -378,25 +373,15 @@ export const forgotPassword = async (
     }
 
     // GENERATE TOKEN
-    const resetToken = crypto
-      .randomBytes(32)
-      .toString("hex");
+    const resetToken = crypto.randomBytes(32).toString("hex");
 
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(resetToken)
-      .digest("hex");
+    const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
 
-    user.resetPasswordToken =
-      hashedToken;
+    user.resetPasswordToken = hashedToken;
 
-    user.resetPasswordExpire =
-      Date.now() + 1000 * 60 * 15;
+    user.resetPasswordExpire = Date.now() + 1000 * 60 * 15;
 
     await user.save();
-
-    await ensureReferralCode(user);
-
     // SEND EMAIL
     try {
       await sendResetEmail(
