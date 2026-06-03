@@ -1,0 +1,62 @@
+import { Schema } from "mongoose";
+
+const userModel = new Schema({
+    fullname: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    faculty: {
+        type: String,
+        required: true
+    },
+    level: {
+        type: Number,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    role: {
+      type: String,
+      enum: ["customer", "admin"],
+      default: "customer",
+    },
+     // 🔐 EMAIL VERIFICATION
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verifyToken: String,
+    verifyTokenExpire: Date,
+
+    // 🔑 PASSWORD RESET
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
+});
+
+// 🔐 HASH PASSWORD
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  } catch (error) {
+    throw new Error("Error hashing password");
+  }
+});
+
+// 🔑 COMPARE PASSWORD
+userSchema.methods.comparePassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+const User = mongoose.model("User", userSchema);
+
+export default User;
