@@ -381,7 +381,7 @@ export const forgotPassword = async ( req, res ) => {
 
     user.resetPasswordExpire = Date.now() + 1000 * 60 * 15;
 
-    await user.save();
+    await user.save();f
     // SEND EMAIL
     try {
       await sendResetEmail(
