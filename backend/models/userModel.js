@@ -18,9 +18,16 @@ const userModel = new Schema({
         type: Number,
         required: true
     },
+    gender: {
+      type: String,
+      required: true
+    },
     password: {
         type: String,
         required: true
+    },
+    profilePic: {
+      type: String,
     },
     role: {
       type: String,
