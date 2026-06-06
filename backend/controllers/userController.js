@@ -16,10 +16,10 @@ const storeRefreshToken = async (userId, refreshToken) => {
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, faculty, level } = req.body;
+    const { name, email, password, faculty, level, gender } = req.body;
 
     // VALIDATION
-    if (!name || !email || !password || !faculty || !level) {
+    if (!name || !email || !password || !faculty || !level || !gender) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -40,14 +40,19 @@ export const registerUser = async (req, res) => {
       });
     }
 
+    const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${name}`
+    const girlProfilePic = `https://avatar.iran.liara.run/public/boy?username=${name}`
+
     // CREATE USER
     const user = await User.create({
       name,
       email: normalizedEmail,
       password,
       faculty,
+      gender,
       level,
       isVerified: false,
+      profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
     });
 
     // GENERATE VERIFICATION TOKEN
