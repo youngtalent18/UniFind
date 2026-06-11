@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 import cors from 'cors';
 import userRoute from './routes/userRoute.js';
+import messageRoute from './routes/messageRoute.js';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/auth", userRoute);
+app.use("/api/message", messageRoute);
 
 connectDB().then(()=>{
     app.listen(PORT,()=>{
