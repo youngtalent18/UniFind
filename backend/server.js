@@ -28,7 +28,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/auth", userRoute);
-app.use("/api/message", messageRoute);
+app.use("/api/messages", messageRoute);
 
 connectDB().then(()=>{
     app.listen(PORT,()=>{
