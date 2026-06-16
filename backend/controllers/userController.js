@@ -262,7 +262,7 @@ export const refresh_token = async (
     // VERIFY TOKEN
     const decoded = jwt.verify(
       refreshToken,
-      process.env.REFRESH_TOKEN_SECRET
+      process.env.REFRESH_TOKEN
     );
 
     // CHECK REDIS TOKEN
@@ -280,7 +280,7 @@ export const refresh_token = async (
     // CREATE NEW ACCESS TOKEN
     const accessToken = jwt.sign(
       { userId: decoded.userId },
-      process.env.ACCESS_TOKEN_SECRET,
+      process.env.ACCESS_TOKEN,
       {
         expiresIn: "15m",
       }
