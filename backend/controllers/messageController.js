@@ -43,3 +43,22 @@ export const sendMessage = async(req, res) => {
         });
     }
 }
+
+export const getMessages = async(req, res) => {
+    try{
+        const {id: userToChatId } = req.params;
+        const senderId = req.params._id;
+
+        const converstaion = await Conversation.create({
+            participants: [senderId, receiverId],
+        }).populate("messages");
+
+        res.status(200).json(conversation.messages);
+    }catch(error){
+        console.log("Error in getMessages contoller",error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
+    }
+}
