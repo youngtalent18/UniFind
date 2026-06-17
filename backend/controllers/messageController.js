@@ -12,7 +12,7 @@ export const sendMessage = async(req, res) => {
         });
 
         if(!conversation){
-            const converstaion = await Conversation.create({
+            const conversation = await Conversation.create({
                 participants: [senderId, receiverId],
             })
         }
@@ -49,7 +49,7 @@ export const getMessages = async(req, res) => {
         const {id: userToChatId } = req.params;
         const senderId = req.params._id;
 
-        const converstaion = await Conversation.create({
+        const conversation = await Conversation.create({
             participants: [senderId, receiverId],
         }).populate("messages");
 
