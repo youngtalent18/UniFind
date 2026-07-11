@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { SlidersHorizontal, X, Search } from "lucide-react";
 import { CATEGORIES, CATEGORY_ICONS } from "../constants/mockData.js";
-import ItemCard from "../Componnets/features/ItemCard";
+import ItemCard from "../Components/features/ItemCard.jsx";
 
 const STATUS_OPTIONS = [
   { value: "", label: "All Status" },

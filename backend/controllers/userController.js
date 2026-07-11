@@ -4,35 +4,8 @@ import jwt from "jsonwebtoken";
 import { redis } from "../config/redis.js";
 import { sendVerificationEmail } from "../lib/utils/sendVerificationEmail.js";
 import { sendResetEmail } from "../lib/utils/sendResetEmail.js";
+import {generateTokenAndSetCookies, setCookies} from "../lib/utils/generateToken.js"
 
-// Helper to generate tokens and set cookies
-const generateTokens = async (userId) => {
-    const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "15m",
-    });
-
-    const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, {
-        expiresIn: "7d",
-    });
-
-    return { accessToken, refreshToken };
-};
-
-const setCookies = (res, accessToken, refreshToken) => {
-    res.cookie("accessToken", accessToken, {
-        httpOnly: true,
-        sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 15 * 60 * 1000,
-    });
-
-    res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-};
 
 const buildUserPayload = (user) => {
     return {
@@ -189,7 +162,7 @@ export const loginUser = async (req, res) => {
         }
 
         // GENERATE TOKENS
-        const { accessToken, refreshToken } = await generateTokens(user._id);
+        const { accessToken, refreshToken } = await generateTokenAndSetCookies(user._id);
 
         // STORE REFRESH TOKEN
         await storeRefreshToken(user._id, refreshToken);
