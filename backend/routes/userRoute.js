@@ -2,7 +2,7 @@ import express from "express";
 import { getUserProfile, loginUser, logoutUser, refresh_token,
      registerUser,forgotPassword,
      resetPassword,verifyEmail,
-     resendVerification } from "../controllers/userController.js";
+     resendVerification } from "../controllers/authController.js";
 import { protectRoute } from "../middleware/protectRoute.js";
 
 const router = express.Router();
