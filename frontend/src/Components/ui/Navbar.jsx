@@ -17,7 +17,7 @@ import {
 
 export default function Navbar() {
 
-  const isAuthenticated = false; // Replace with actual auth logic
+  const isAuthenticated = true; // Replace with actual auth logic
   const currentUser = {
     name: "John Doe",
     email: "john.doe@example.com"
@@ -63,7 +63,7 @@ export default function Navbar() {
           </form>
 
           {/* DESKTOP NAV */}
-          <nav className="hidden flex-shrink-0 items-center gap-1 md:flex">
+          <nav className="hidden shrink-0 items-center gap-1 md:flex">
             <Link
               to="/feed"
               className={cn(
@@ -90,7 +90,7 @@ export default function Navbar() {
           </nav>
 
           {/* ACTIONS */}
-          <div className="ml-auto flex flex-shrink-0 items-center gap-2">
+          <div className="ml-auto flex shrink-0 items-center gap-2">
             {isAuthenticated ? (
               <>
                 <Link
