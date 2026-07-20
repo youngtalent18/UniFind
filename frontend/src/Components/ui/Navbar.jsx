@@ -44,9 +44,9 @@ export default function Navbar() {
           {/* LOGO */}
           <Link
             to="/"
-            className="flex flex-shrink-0 items-center gap-2.5"
+            className="flex shrink-0 items-center gap-2.5"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-teal-500">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-linear-to-br from-blue-500 to-teal-500">
               <ShieldCheck className="h-4 w-4 text-white" />
             </div>
 
