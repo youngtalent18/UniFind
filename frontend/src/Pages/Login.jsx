@@ -12,9 +12,11 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-background">
       <div className="w-full max-w-md animate-fade-in">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-500 to-teal-500 flex items-center justify-center mx-auto mb-4">
-            <ShieldCheck className="w-7 h-7 text-white" />
-          </div>
+          <Link to={"/"}>
+            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-500 to-teal-500 flex items-center justify-center mx-auto mb-4">
+              <ShieldCheck className="w-7 h-7 text-white" />
+            </div>
+          </Link>
 
           <h1 className="text-2xl font-bold mb-1">Welcome back</h1>
 
