@@ -26,7 +26,7 @@ const Conversation = ({ conversation, messages, onBack }) => {
   }
 
   return (
-    <section className="flex min-h-[620px] flex-1 flex-col bg-card lg:min-h-0">
+    <section className="flex min-h-155 flex-1 flex-col bg-card lg:min-h-0">
       <header className="flex items-center gap-3 border-b border-border/80 px-4 py-3.5 sm:px-5">
         <button onClick={onBack} className="rounded-xl p-2 text-muted-foreground hover:bg-secondary hover:text-foreground lg:hidden" aria-label="Back to conversations">
           <ArrowLeft className="h-5 w-5" />

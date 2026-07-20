@@ -48,7 +48,7 @@ const Messages = () => {
           </aside>
 
           <div className={`${mobileConversationOpen ? "flex" : "hidden lg:flex"} min-w-0`}>
-            {activeConversation ? <Conversation conversation={activeConversation} messages={MOCK_MESSAGES[activeConversation.id] ?? []} onBack={() => setMobileConversationOpen(false)} /> : null}
+            {activeConversation ? <Conversation key={activeConversation.id} conversation={activeConversation} messages={MOCK_MESSAGES[activeConversation.id] ?? []} onBack={() => setMobileConversationOpen(false)} /> : null}
           </div>
         </div>
       </div>
