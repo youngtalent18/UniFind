@@ -27,7 +27,7 @@ const Conversations = ({ conversations, activeId, onSelect }) => {
     <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-3">
       {conversations.map((conversation) => {
         const isActive = conversation.id === activeId
-        const partnerId = conversation.participants.find((id) => id !== "current")
+        const partnerId = conversation.partnerId || conversation.participants.find((id) => id !== "current")
         const name = conversation.participantNames[partnerId]
         const avatar = conversation.participantAvatars[partnerId]
 

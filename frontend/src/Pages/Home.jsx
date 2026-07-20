@@ -1,9 +1,21 @@
-import React from 'react'
+import { ArrowRight, ClipboardPlus, Search, ShieldCheck, Sparkles } from "lucide-react"
+import { Link } from "react-router-dom"
+import ItemCard from "../Components/features/ItemCard"
+import { CATEGORIES, CATEGORY_ICONS, MOCK_ITEMS } from "../constants/mockData"
 
 const Home = () => {
-  return (
-    <div>Home</div>
-  )
+  const activeItems = MOCK_ITEMS.filter((item) => item.status === "active")
+  const recovered = MOCK_ITEMS.filter((item) => item.status === "recovered" || item.status === "claimed").length
+
+  return <div className="overflow-hidden">
+    <section className="relative border-b border-border bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.2),transparent_45%)]"><div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8"><div className="max-w-3xl"><div className="mb-5 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1.5 text-xs font-semibold text-blue-300"><Sparkles className="h-3.5 w-3.5" />Campus community lost & found</div><h1 className="text-4xl font-black tracking-tight sm:text-6xl">Find what matters. <span className="text-gradient">Help it get home.</span></h1><p className="mt-6 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">UniFind helps students report, discover, and safely reclaim lost property around campus.</p><div className="mt-8 flex flex-col gap-3 sm:flex-row"><Link to="/feed" className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-500 px-5 py-3 font-semibold text-white transition hover:bg-blue-400"><Search className="h-4 w-4" />Browse items</Link><Link to="/report" className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 py-3 font-semibold transition hover:border-blue-500/40"><ClipboardPlus className="h-4 w-4" />Report an item</Link></div></div></div></section>
+    <section className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 py-8 sm:grid-cols-4 sm:px-6 lg:px-8"><Stat value={activeItems.length} label="Active reports" /><Stat value={MOCK_ITEMS.filter((item) => item.type === "found").length} label="Items found" /><Stat value={recovered} label="Items recovered" /><Stat value="24/7" label="Campus support" /></section>
+    <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8"><div className="mb-6 flex items-end justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.18em] text-blue-400">Explore</p><h2 className="mt-1 text-2xl font-bold">Browse by category</h2></div><Link to="/feed" className="inline-flex items-center gap-1 text-sm font-semibold text-blue-400 hover:text-blue-300">See all <ArrowRight className="h-4 w-4" /></Link></div><div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">{CATEGORIES.slice(0, 6).map((category) => <Link key={category} to={`/feed?category=${encodeURIComponent(category)}`} className="card-hover rounded-2xl border border-border bg-card p-4 text-center"><span className="text-2xl">{CATEGORY_ICONS[category]}</span><p className="mt-2 text-sm font-semibold">{category}</p></Link>)}</div></section>
+    <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8"><div className="mb-6 flex items-end justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.18em] text-blue-400">Latest reports</p><h2 className="mt-1 text-2xl font-bold">Recently added items</h2></div><Link to="/feed" className="text-sm font-semibold text-blue-400 hover:text-blue-300">View feed</Link></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{MOCK_ITEMS.slice(0, 4).map((item) => <ItemCard key={item.id} item={item} />)}</div></section>
+    <section className="mx-auto max-w-7xl px-4 pb-16 pt-6 sm:px-6 lg:px-8"><div className="rounded-3xl border border-blue-500/20 bg-blue-500/10 p-8 sm:p-10"><ShieldCheck className="h-8 w-8 text-blue-400" /><h2 className="mt-4 text-2xl font-bold">Keep every handoff safe.</h2><p className="mt-2 max-w-2xl text-muted-foreground">Keep conversations on UniFind, verify ownership before returning an item, and meet in a visible campus location.</p></div></section>
+  </div>
 }
+
+const Stat = ({ value, label }) => <div className="rounded-2xl border border-border bg-card p-4 text-center"><p className="text-2xl font-black text-blue-400">{value}</p><p className="mt-1 text-xs text-muted-foreground">{label}</p></div>
 
 export default Home

@@ -1,10 +1,33 @@
 import { useState } from "react";
 import { ShieldCheck, Eye, EyeOff } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { authApi } from "../lib/api";
+import { useAuthStore } from "../lib/authStore";
 
 export default function LoginPage() {
 
   const [showPass, setShowPass] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const setUser = useAuthStore((state) => state.setUser);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setSubmitting(true);
+    try {
+      const { data } = await authApi.login({ email, password });
+      setUser(data.user);
+      toast.success("Welcome back!");
+      navigate("/feed");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Could not sign in");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
 
 
@@ -26,7 +49,7 @@ export default function LoginPage() {
         </div>
 
         <div className="bg-card border border-border rounded-2xl p-6">
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-sm font-medium mb-1.5">
                 School Email
@@ -34,6 +57,8 @@ export default function LoginPage() {
 
               <input
                 type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
                 placeholder="yourname@unilag.atu.gh"
                 required
                 className="w-full bg-secondary/60 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
@@ -48,6 +73,8 @@ export default function LoginPage() {
               <div className="relative">
                 <input
                   type={showPass ? "text" : "password"}
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
                   placeholder="Enter your password"
                   required
                   className="w-full bg-secondary/60 border border-border rounded-xl px-4 py-3 text-sm pr-11 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
@@ -76,9 +103,10 @@ export default function LoginPage() {
 
             <button
               type="submit"
+              disabled={submitting}
               className="w-full bg-blue-500 hover:bg-blue-400 disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-colors"
             >
-               Sign In
+               {submitting ? "Signing in…" : "Sign In"}
             </button>
           </form>
 

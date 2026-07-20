@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {cn} from "../../lib/utils";
 import {
@@ -13,23 +13,29 @@ import {
   User,
   LayoutDashboard,
 } from "lucide-react";
+import { useAuthStore } from "../../lib/authStore";
 
 
 export default function Navbar() {
 
-  const isAuthenticated = true; // Replace with actual auth logic
-  const currentUser = {
-    name: "John Doe",
-    email: "john.doe@example.com"
-  };
-  const unreadMessages = 3; // Replace with actual data
-  const unreadNotifs = 5; // Replace with actual data
+  const { user: currentUser, initialized, checkAuth, logout } = useAuthStore();
+  const isAuthenticated = Boolean(currentUser);
+  const unreadMessages = 0;
+  const unreadNotifs = 0;
   const navigate = useNavigate();
   const location = useLocation();
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const isActive = (path) => location.pathname === path;
+
+  useEffect(() => { checkAuth(); }, [checkAuth]);
+
+  const handleLogout = async () => {
+    await logout();
+    setShowProfileMenu(false);
+    navigate("/");
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl">
@@ -91,7 +97,7 @@ export default function Navbar() {
 
           {/* ACTIONS */}
           <div className="ml-auto flex shrink-0 items-center gap-2">
-            {isAuthenticated ? (
+            {!initialized ? null : isAuthenticated ? (
               <>
                 <Link
                   to="/report"
@@ -137,10 +143,10 @@ export default function Navbar() {
                   >
                     <img
                       src={
-                        currentUser?.avatar ||
-                        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop"
+                        currentUser?.profilePic ||
+                        "https://avatar.iran.liara.run/public"
                       }
-                      alt={currentUser?.name}
+                      alt={currentUser?.fullname}
                       className="h-8 w-8 rounded-lg border border-blue-500/30 object-cover"
                     />
                   </button>
@@ -149,7 +155,7 @@ export default function Navbar() {
                     <div className="absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-xl border border-border bg-card shadow-xl shadow-black/20">
                       <div className="border-b border-border px-4 py-3">
                         <p className="truncate text-sm font-semibold">
-                          {currentUser?.name}
+                          {currentUser?.fullname}
                         </p>
 
                         <p className="truncate text-xs text-muted-foreground">
@@ -169,7 +175,7 @@ export default function Navbar() {
                           My Profile
                         </Link>
 
-                        {currentUser?.isAdmin && (
+                        {currentUser?.role === "admin" && (
                           <Link
                             to="/admin"
                             onClick={() =>
@@ -183,10 +189,7 @@ export default function Navbar() {
                         )}
 
                         <button
-                          onClick={() => {
-                            setShowProfileMenu(false);
-                            navigate("/");
-                          }}
+                          onClick={handleLogout}
                           className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-rose-400 transition-colors hover:bg-rose-500/10"
                         >
                           <LogOut className="h-4 w-4" />

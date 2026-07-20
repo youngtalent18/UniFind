@@ -242,7 +242,7 @@ export const refresh_token = async (req, res) => {
         }
 
         // VERIFY TOKEN
-        const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET || process.env.REFRESH_TOKEN);
 
         // CHECK REDIS TOKEN
         const storedToken = await redis.get(`refresh_token:${decoded.userId}`);
@@ -257,7 +257,7 @@ export const refresh_token = async (req, res) => {
         // CREATE NEW ACCESS TOKEN
         const accessToken = jwt.sign(
             { userId: decoded.userId },
-            process.env.ACCESS_TOKEN_SECRET,
+            process.env.ACCESS_TOKEN_SECRET || process.env.ACCESS_TOKEN,
             {
                 expiresIn: "15m",
             }
@@ -453,7 +453,7 @@ export const verifyEmail = async (req, res) => {
         await user.save();
 
         // AUTO LOGIN
-        const { accessToken, refreshToken } = await generateTokens(user._id);
+        const { accessToken, refreshToken } = await generateTokenAndSetCookies(user._id);
 
         await storeRefreshToken(user._id, refreshToken);
 

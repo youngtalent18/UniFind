@@ -10,6 +10,10 @@ import SignUp from "./Pages/RegisterPage";
 import NotFound from "./Pages/NotFound";
 import FeedPage from "./Pages/FeedPage";
 import Messages from "./Pages/Messages"
+import ReportPage from "./Pages/ReportPage"
+import Notifications from "./Pages/Notifications"
+import Profile from "./Pages/Profile"
+import RequireAuth from "./Components/auth/RequireAuth"
 
 const router = createBrowserRouter([
   {
@@ -29,8 +33,13 @@ const router = createBrowserRouter([
         element: <FeedPage />,
       },
       {
-        path: "/messages",
-        element: <Messages />,
+        element: <RequireAuth />,
+        children: [
+          { path: "/messages", element: <Messages /> },
+          { path: "/report", element: <ReportPage /> },
+          { path: "/notifications", element: <Notifications /> },
+          { path: "/profile", element: <Profile /> },
+        ],
       },
     ],
   },

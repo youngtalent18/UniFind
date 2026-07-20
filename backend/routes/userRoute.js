@@ -1,24 +1,18 @@
 import express from "express";
-import { getUserProfile, loginUser, logoutUser, refresh_token,
-     registerUser,forgotPassword,
-     resetPassword,verifyEmail,
-     resendVerification } from "../controllers/authController.js";
+import User from "../models/userModel.js";
 import { protectRoute } from "../middleware/protectRoute.js";
 
 const router = express.Router();
 
-router.post('/register', registerUser);
-router.post('/login', loginUser);
-router.post('/logout', logoutUser);
-router.post('/refresh-token', refresh_token);
-router.get('/profile',protectRoute, getUserProfile);
-
-//Password Reset
-router.post("/forgot-password", forgotPassword);
-router.post("/reset-password/:token", resetPassword);
-
-//User verification
-router.get("/verify-email/:token", verifyEmail);
-router.post("/resend-verification", resendVerification);
+router.get("/", protectRoute, async (req, res) => {
+  try {
+    const users = await User.find({ _id: { $ne: req.user._id } })
+      .select("fullname email faculty level profilePic isVerified")
+      .sort({ fullname: 1 });
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: "Could not load users" });
+  }
+});
 
 export default router;
