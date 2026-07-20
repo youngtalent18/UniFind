@@ -6,6 +6,8 @@ import cors from 'cors';
 import userRoute from './routes/userRoute.js';
 import messageRoute from './routes/messageRoute.js';
 
+import { app, server } from "./socket/socket.js"
+
 dotenv.config();
 
 const app = express();
