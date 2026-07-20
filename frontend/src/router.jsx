@@ -9,6 +9,7 @@ import Login from "./Pages/Login";
 import SignUp from "./Pages/RegisterPage";
 import NotFound from "./Pages/NotFound";
 import FeedPage from "./Pages/FeedPage";
+import Messages from "./Pages/Messages"
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/feed",
         element: <FeedPage />,
+      },
+      {
+        path: "/messages",
+        element: <Messages />,
       },
     ],
   },
